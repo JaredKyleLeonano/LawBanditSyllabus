@@ -36,4 +36,8 @@ app.use(syllabiRouter);
 app.use(assignmentsRouter);
 app.use(googleRouter);
 
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", time: new Date().toISOString() });
+});
+
 export default app;
