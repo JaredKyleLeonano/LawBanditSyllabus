@@ -8,9 +8,12 @@ import googleRouter from "../routes/googleRoutes.js";
 const app = express();
 app.use(cors());
 
-const FRONTEND_URL = "http://law-bandit-front-end.vercel.app";
-const DEV_ORIGIN = "http://localhost:5173";
-const allowedOrigins = [FRONTEND_URL, DEV_ORIGIN];
+const allowedOrigins = [
+  "https://law-bandit-front-end.vercel.app",
+  "https://law-bandit-front-end-git-main-jared-leonanos-projects.vercel.app/",
+  "https://law-bandit-front-r5190cqgm-jared-leonanos-projects.vercel.app",
+  "http://localhost:5173",
+];
 
 app.use(
   cors({
@@ -31,7 +34,7 @@ app.use(
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin!)) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Origin", origin!);
   }
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   res.setHeader(
