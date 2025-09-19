@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "vercel-build": "npm ci && npm run build",
-    "build": "tsc",
+    "build": "npx tsc",
     "dev": "nodemon --watch src --exec npx ts-node src/dev-server.ts",
     "postinstall": "if [ \"$VERCEL\" != \"1\" ]; then patch-package; fi",
     "start": "node dist/dev-server.js"
