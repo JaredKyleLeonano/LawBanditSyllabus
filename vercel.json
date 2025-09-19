@@ -1,4 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build && patch-package"
+  "buildCommand": "npm run build && patch-package",
+  "builds": [{ "src": "api/**/*.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/api/(.*)", "dest": "/api/$1" }]
 }
