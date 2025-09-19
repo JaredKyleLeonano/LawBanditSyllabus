@@ -11,6 +11,7 @@ const allowedOrigins = [
   "https://law-bandit-front-end.vercel.app",
   "https://law-bandit-front-end-git-main-jared-leonanos-projects.vercel.app",
   "https://law-bandit-front-r5190cqgm-jared-leonanos-projects.vercel.app",
+  "https://law-bandit-front-r6j2e53u8-jared-leonanos-projects.vercel.app",
   "http://localhost:5173",
 ];
 
