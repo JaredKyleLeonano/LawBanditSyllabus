@@ -3,6 +3,7 @@ import syllabiRouter from "../routes/syllabiRoutes.js";
 import classRouter from "../routes/classRoutes.js";
 import assignmentsRouter from "../routes/assignmentsRoutes.js";
 import googleRouter from "../routes/googleRoutes.js";
+import cors from "cors";
 
 const app = express();
 
@@ -13,27 +14,40 @@ const allowedOrigins = [
   "http://localhost:5173",
 ];
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigins);
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, DELETE, UPDATE, OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", allowedOrigins);
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, DELETE, UPDATE, OPTIONS"
+//   );
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//   res.setHeader("Access-Control-Allow-Credentials", "true");
 
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
 
-  next();
-});
+//   next();
+// });
 
-app.get("/", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigins);
-  return res.json({ ok: true });
-});
-
+// app.get("/", (req, res) => {
+//   res.setHeader("Access-Control-Allow-Origin", allowedOrigins);
+//   return res.json({ ok: true });
+// });
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("CORS not allowed"), false);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  })
+);
 app.use(express.json());
 
 app.use(classRouter);
