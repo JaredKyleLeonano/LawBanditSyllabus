@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import syllabiRouter from "./routes/syllabiRoutes.js";
-import classRouter from "./routes/classRoutes.js";
-import assignmentsRouter from "./routes/assignmentsRoutes.js";
-import googleRouter from "./routes/googleRoutes.js";
+import syllabiRouter from "../routes/syllabiRoutes.js";
+import classRouter from "../routes/classRoutes.js";
+import assignmentsRouter from "../routes/assignmentsRoutes.js";
+import googleRouter from "../routes/googleRoutes.js";
 
 const app = express();
 app.use(cors());

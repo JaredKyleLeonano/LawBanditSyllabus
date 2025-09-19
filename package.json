@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --watch src --exec npx tsx src/server.ts",
+    "dev": "nodemon --watch src --exec npx tsx src/api/index.ts",
     "postinstall": "patch-package"
   },
   "keywords": [],
