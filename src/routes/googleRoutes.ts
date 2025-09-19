@@ -24,7 +24,7 @@ googleRouter.post("/saveTokens", async (req, res) => {
       expires_in,
     } = req.body;
     const savedTokens = await saveTokens(
-      authHeader,
+      authHeader!,
       user_id,
       provider,
       provider_token,
@@ -44,7 +44,7 @@ googleRouter.delete("/deleteTokens/:user_id", async (req, res) => {
   const user_id = req.params.user_id;
 
   try {
-    const deletedTokens = await deleteTokens(authHeader, user_id);
+    const deletedTokens = await deleteTokens(authHeader!, user_id);
 
     res.send(deletedTokens);
   } catch (error) {
@@ -57,7 +57,7 @@ googleRouter.post("/createCalendar", async (req, res) => {
   const authHeader = req.headers.authorization;
   const { user_id, title } = req.body;
   try {
-    let retrievedTokens = await getUserTokens(authHeader, user_id);
+    let retrievedTokens = await getUserTokens(authHeader!, user_id);
 
     let access_token = retrievedTokens[0].provider_token;
     const refresh_token = retrievedTokens[0].refresh_token;
@@ -67,7 +67,7 @@ googleRouter.post("/createCalendar", async (req, res) => {
     if (createdCalendar.status === 401 && refresh_token) {
       const refreshed = await refreshAccessToken(refresh_token);
       access_token = refreshed.access_token;
-      await updateAccessToken(authHeader, user_id, access_token);
+      await updateAccessToken(authHeader!, user_id, access_token);
       createdCalendar = await createCalendar(access_token!, title);
     }
 

@@ -43,13 +43,13 @@ export const getUserTokens = async (authHeader: string, user_id: string) => {
 export const updateAccessToken = async (
   authHeader: string,
   user_id: string,
-  access_token
+  provider_token: string
 ) => {
   if (!authHeader) throw new Error("Missing authorization header");
 
   const { data, error } = await supabase(authHeader)
     .from("user_tokens")
-    .update({ access_token })
+    .update({ provider_token })
     .eq("user_id", user_id);
 
   if (error) throw error;

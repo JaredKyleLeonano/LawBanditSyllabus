@@ -17,7 +17,7 @@ export const uploadSyllabus = async (
   class_id: string,
   title: string,
   color: string,
-  calendar_id: string = null
+  calendar_id: string | null = null
 ) => {
   if (!authHeader) throw new Error("Missing authorization header");
 

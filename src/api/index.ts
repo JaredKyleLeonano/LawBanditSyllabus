@@ -14,4 +14,4 @@ app.use(syllabiRouter);
 app.use(assignmentsRouter);
 app.use(googleRouter);
 
-app.listen(4000);
+export default app;

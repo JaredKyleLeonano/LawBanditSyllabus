@@ -33,7 +33,7 @@ const upload = multer({ storage });
 syllabiRouter.get("/getSyllabi", async (req, res) => {
   const authHeader = req.headers.authorization;
   try {
-    const syllabi = await getSyllabi(authHeader);
+    const syllabi = await getSyllabi(authHeader!);
     res.send(syllabi);
   } catch (error) {
     console.error("Error retrieving syllabi:", error);
@@ -46,7 +46,7 @@ syllabiRouter.post(
   upload.single("pdf"),
   async (req, res) => {
     const authHeader = req.headers.authorization;
-    const pdf = req.file.buffer;
+    const pdf = req.file!.buffer;
     const { classId, isGoogle, user_id } = req.body;
     const parsedPdf = await pdfParse(pdf);
     const extractedSyllabus: SyllabusType = await extractAssignments(
@@ -54,14 +54,14 @@ syllabiRouter.post(
     );
 
     let color;
-    let insertedSyllabus;
+    let insertedSyllabus: SyllabusType[];
     let assignmentsToInsert = [];
 
     try {
       if (isGoogle != "true") {
         color = await syllabusColorChooser();
         insertedSyllabus = await uploadSyllabus(
-          authHeader,
+          authHeader!,
           classId,
           extractedSyllabus.title,
           color
@@ -78,7 +78,7 @@ syllabiRouter.post(
           })
         );
       } else {
-        let retrievedTokens = await getUserTokens(authHeader, user_id);
+        let retrievedTokens = await getUserTokens(authHeader!, user_id);
 
         let provider_token = retrievedTokens[0].provider_token;
         const refresh_token = retrievedTokens[0].refresh_token;
@@ -91,7 +91,7 @@ syllabiRouter.post(
         if (createdCalendar.error?.code === 401 && refresh_token) {
           const refreshed = await refreshAccessToken(refresh_token);
           provider_token = refreshed.access_token;
-          await updateAccessToken(authHeader, user_id, provider_token);
+          await updateAccessToken(authHeader!, user_id, provider_token);
           createdCalendar = await createCalendar(
             provider_token!,
             extractedSyllabus.title
@@ -106,7 +106,7 @@ syllabiRouter.post(
         if (insertedCalendar.error?.code === 401 && refresh_token) {
           const refreshed = await refreshAccessToken(refresh_token);
           provider_token = refreshed.access_token;
-          await updateAccessToken(authHeader, user_id, provider_token);
+          await updateAccessToken(authHeader!, user_id, provider_token);
 
           insertedCalendar = await insertCalendar(
             provider_token,
@@ -115,7 +115,7 @@ syllabiRouter.post(
         }
 
         insertedSyllabus = await uploadSyllabus(
-          authHeader,
+          authHeader!,
           classId,
           extractedSyllabus.title,
           insertedCalendar.backgroundColor,
@@ -154,7 +154,7 @@ syllabiRouter.post(
           if (createdEvent.error?.code === 401 && refresh_token) {
             const refreshed = await refreshAccessToken(refresh_token);
             provider_token = refreshed.access_token;
-            await updateAccessToken(authHeader, user_id, provider_token);
+            await updateAccessToken(authHeader!, user_id, provider_token);
 
             createdEvent = await createCalendarEvent(
               provider_token,
@@ -167,8 +167,12 @@ syllabiRouter.post(
         }
       }
 
-      await uploadAssignments(authHeader, assignmentsToInsert);
-      await connectClassSyllabus(authHeader, classId, insertedSyllabus[0].id);
+      await uploadAssignments(authHeader!, assignmentsToInsert);
+      await connectClassSyllabus(
+        authHeader!,
+        classId,
+        insertedSyllabus[0].id.toString()
+      );
 
       res.send({
         syllabus_title: extractedSyllabus.title,
@@ -188,13 +192,13 @@ syllabiRouter.put("/updateSyllabus/:syllabus_id", async (req, res) => {
 
   try {
     const updatedSyllabus = await updateSyllabus(
-      authHeader,
+      authHeader!,
       syllabusId,
       syllabus_title
     );
 
     if (calendar_id) {
-      let retrievedTokens = await getUserTokens(authHeader, user_id);
+      let retrievedTokens = await getUserTokens(authHeader!, user_id);
 
       let provider_token = retrievedTokens[0].provider_token;
       const refresh_token = retrievedTokens[0].refresh_token;
@@ -208,7 +212,7 @@ syllabiRouter.put("/updateSyllabus/:syllabus_id", async (req, res) => {
       if (updatedCalendar.error?.code === 401 && refresh_token) {
         const refreshed = await refreshAccessToken(refresh_token);
         provider_token = refreshed.access_token;
-        await updateAccessToken(authHeader, user_id, provider_token);
+        await updateAccessToken(authHeader!, user_id, provider_token);
         updatedCalendar = await updateCalendar(
           provider_token,
           calendar_id,
@@ -230,11 +234,11 @@ syllabiRouter.delete("/deleteSyllabus/:syllabus_id", async (req, res) => {
   const { calendar_id, class_id, user_id } = req.body;
 
   try {
-    await disconnectClassSyllabus(authHeader, class_id);
-    const deletedSyllabus = await deleteSyllabus(authHeader, syllabusId);
+    await disconnectClassSyllabus(authHeader!, class_id);
+    const deletedSyllabus = await deleteSyllabus(authHeader!, syllabusId);
 
     if (calendar_id) {
-      let retrievedTokens = await getUserTokens(authHeader, user_id);
+      let retrievedTokens = await getUserTokens(authHeader!, user_id);
 
       let provider_token = retrievedTokens[0].provider_token;
       const refresh_token = retrievedTokens[0].refresh_token;
@@ -244,7 +248,7 @@ syllabiRouter.delete("/deleteSyllabus/:syllabus_id", async (req, res) => {
       if (deletedCalendar.status === 401 && refresh_token) {
         const refreshed = await refreshAccessToken(refresh_token);
         provider_token = refreshed.access_token;
-        await updateAccessToken(authHeader, user_id, provider_token);
+        await updateAccessToken(authHeader!, user_id, provider_token);
         deletedCalendar = await deleteCalendar(provider_token, calendar_id);
       }
     }

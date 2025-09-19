@@ -6,7 +6,7 @@ dotenv.config();
 const supabaseUrl: string = process.env.SUPABASE_URL!;
 const supabaseKey: string = process.env.SUPABASE_ANON_KEY!;
 
-export const supabase = (sessionToken) => {
+export const supabase = (sessionToken: string) => {
   return createClient(supabaseUrl, supabaseKey, {
     global: { headers: { Authorization: sessionToken } },
   });

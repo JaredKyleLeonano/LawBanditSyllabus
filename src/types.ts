@@ -20,6 +20,7 @@ export interface FormattedAssignmentType {
 }
 
 export interface SyllabusType {
+  id: number;
   title: string;
   assignments: ExtractedAssignmentType[];
 }

@@ -20,7 +20,7 @@ const assignmentsRouter = express.Router();
 assignmentsRouter.get("/getAssignments", async (req, res) => {
   const authHeader = req.headers.authorization;
   try {
-    const assignments = await getAssignments(authHeader);
+    const assignments = await getAssignments(authHeader!);
 
     res.send(assignments);
   } catch (error) {
@@ -46,7 +46,7 @@ assignmentsRouter.post("/createAssignment", async (req, res) => {
           dateTime: normalizeDate(end),
         },
       };
-      let retrievedTokens = await getUserTokens(authHeader, user_id);
+      let retrievedTokens = await getUserTokens(authHeader!, user_id);
 
       let provider_token = retrievedTokens[0].provider_token;
       const refresh_token = retrievedTokens[0].refresh_token;
@@ -60,7 +60,7 @@ assignmentsRouter.post("/createAssignment", async (req, res) => {
       if (createdEvent.error?.code === 401 && refresh_token) {
         const refreshed = await refreshAccessToken(refresh_token);
         provider_token = refreshed.access_token;
-        await updateAccessToken(authHeader, user_id, provider_token);
+        await updateAccessToken(authHeader!, user_id, provider_token);
         createdEvent = await createCalendarEvent(
           provider_token!,
           calendar_id,
@@ -71,7 +71,7 @@ assignmentsRouter.post("/createAssignment", async (req, res) => {
     }
 
     const createdAssignment = await createAssignment(
-      authHeader,
+      authHeader!,
       syllabus_id,
       title,
       subtitle,
@@ -95,7 +95,7 @@ assignmentsRouter.put("/updateAssignment/:assignment_id", async (req, res) => {
 
   try {
     const updatedAssignment = await updateAssignment(
-      authHeader,
+      authHeader!,
       assignmentId,
       title,
       subtitle,
@@ -115,7 +115,7 @@ assignmentsRouter.put("/updateAssignment/:assignment_id", async (req, res) => {
         },
       };
 
-      let retrievedTokens = await getUserTokens(authHeader, user_id);
+      let retrievedTokens = await getUserTokens(authHeader!, user_id);
 
       let provider_token = retrievedTokens[0].provider_token;
       const refresh_token = retrievedTokens[0].refresh_token;
@@ -130,7 +130,7 @@ assignmentsRouter.put("/updateAssignment/:assignment_id", async (req, res) => {
       if (updatedEvent.error?.code === 401 && refresh_token) {
         const refreshed = await refreshAccessToken(refresh_token);
         provider_token = refreshed.access_token;
-        await updateAccessToken(authHeader, user_id, provider_token);
+        await updateAccessToken(authHeader!, user_id, provider_token);
         updatedEvent = await updateCalendarEvent(
           provider_token!,
           calendar_id,
@@ -156,12 +156,12 @@ assignmentsRouter.delete(
 
     try {
       const deletedAssignment = await deleteAssignment(
-        authHeader,
+        authHeader!,
         assignmentId
       );
 
       if (event_id) {
-        let retrievedTokens = await getUserTokens(authHeader, user_id);
+        let retrievedTokens = await getUserTokens(authHeader!, user_id);
 
         let provider_token = retrievedTokens[0].provider_token;
         const refresh_token = retrievedTokens[0].refresh_token;
@@ -175,7 +175,7 @@ assignmentsRouter.delete(
         if (deletedEvent.status === 401 && refresh_token) {
           const refreshed = await refreshAccessToken(refresh_token);
           provider_token = refreshed.access_token;
-          await updateAccessToken(authHeader, user_id, provider_token);
+          await updateAccessToken(authHeader!, user_id, provider_token);
           deletedEvent = await deleteCalendarEvent(
             provider_token!,
             calendar_id,

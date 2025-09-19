@@ -12,7 +12,7 @@ classRouter.post("/createClass", async (req, res) => {
   const authHeader = req.headers.authorization;
   const { title } = req.body;
   try {
-    const createdClass = await createClass(authHeader, title);
+    const createdClass = await createClass(authHeader!, title);
 
     res.send(createdClass);
   } catch (error) {
@@ -24,7 +24,7 @@ classRouter.post("/createClass", async (req, res) => {
 classRouter.get("/getClasses", async (req, res) => {
   const authHeader = req.headers.authorization;
   try {
-    const retrievedClasses = await getClasses(authHeader);
+    const retrievedClasses = await getClasses(authHeader!);
 
     res.send(retrievedClasses);
   } catch (error) {
@@ -39,7 +39,7 @@ classRouter.put("/updateClass/:class_id", async (req, res) => {
   const { class_title } = req.body;
 
   try {
-    const updatedClass = await updateClass(authHeader, classId, class_title);
+    const updatedClass = await updateClass(authHeader!, classId, class_title);
 
     res.send(updatedClass);
   } catch (error) {
@@ -53,7 +53,7 @@ classRouter.delete("/deleteClass/:class_id", async (req, res) => {
   const syllabusId = req.params.class_id;
 
   try {
-    const deletedSyllabus = await deleteClass(authHeader, syllabusId);
+    const deletedSyllabus = await deleteClass(authHeader!, syllabusId);
     res.send(deletedSyllabus);
   } catch (error) {
     console.error("Error deleting class:", error);
