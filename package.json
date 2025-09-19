@@ -5,17 +5,20 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --watch src --exec npx tsx src/api/index.ts",
-    "postinstall": "if [ \"$VERCEL\" != \"1\" ]; then patch-package; fi"
+    "dev": "nodemon --watch src --exec npx ts-node src/dev-server.ts",
+    "postinstall": "if [ \"$VERCEL\" != \"1\" ]; then patch-package; fi",
+    "start": "node dist/dev-server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.3.0",
+    "@types/pdf-parse": "^1.1.5",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
