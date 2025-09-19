@@ -9,6 +9,9 @@
     "postinstall": "if [ \"$VERCEL\" != \"1\" ]; then patch-package; fi",
     "start": "node dist/dev-server.js"
   },
+  "engines": {
+    "node": "22.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
