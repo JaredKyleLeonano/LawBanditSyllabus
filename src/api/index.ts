@@ -8,7 +8,7 @@ import googleRouter from "../routes/googleRoutes.js";
 const app = express();
 app.use(cors());
 
-const FRONTEND_URL = "https://law-bandit-front-end.vercel.app";
+const FRONTEND_URL = "http://law-bandit-front-end.vercel.app";
 const DEV_ORIGIN = "http://localhost:5173";
 const allowedOrigins = [FRONTEND_URL, DEV_ORIGIN];
 
