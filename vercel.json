@@ -1,5 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "builds": [{ "src": "src/index.js", "use": "@vercel/node" }],
+  "buildCommand": "npm run build"
 }
