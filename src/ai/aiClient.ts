@@ -1,9 +1,9 @@
-import Groq from "groq-sdk";
+import * as GroqModule from "groq-sdk";
 import dotenv from "dotenv";
-
 dotenv.config();
 
-const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const GroqCtor = (GroqModule as any).default ?? (GroqModule as any);
+const client = new GroqCtor({ apiKey: process.env.GROQ_API_KEY });
 
 export async function extractAssignments(pdf: string) {
   const response = await client.chat.completions.create({
@@ -41,8 +41,8 @@ export async function extractAssignments(pdf: string) {
     ],
   });
   console.log(response.choices[0].message.content);
-  const scheduleCleaned = response.choices[0].message.content
-    .replace(/```json|```/g, "")
+  const scheduleCleaned = response.choices[0].message
+    .content!.replace(/```json|```/g, "")
     .trim();
   const schedule = JSON.parse(scheduleCleaned);
   return schedule;
