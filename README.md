@@ -85,11 +85,14 @@ A Node.js/Express backend for extracting, storing, and managing law school sylla
 ```
 LawBanditSyllabus/
 ├── src/
-│   ├── index.ts         # PDF extraction and AI logic
-│   ├── server.ts        # Express server and API routes
-│   └── ...
-├── pdf/                 # Example syllabus PDFs
-├── patches/             # Patch files for dependencies
+│   ├── ai/
+│   │   └── aiClient.ts     # AI extraction logic (Groq integration)
+│   ├── api/
+│   │   └── index.ts        # Setup for express server and API routes
+│   ├── routes/             # Contains all of the routes for the various API calls
+│   ├── queries/            # Contains all of the queries used to communicate with either supabase or google
+├── patches/                # Patch files for dependencies
+├── supabase.ts/            # Creation of supabase client for database calls
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -104,11 +107,3 @@ GROQ_API_KEY=your_groq_api_key
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_key
 ```
-
-## Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-ISC
